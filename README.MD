@@ -106,6 +106,14 @@ Response example:
 }
 ```
 
+### Diagrams
+
+## High-level architecture
+
+## Database design
+
+## Application modules dependency map
+
 ### TODO
 - diagram (service level, project modules with shared dependencies, db level)
 - mapstruct for auto-mapping

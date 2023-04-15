@@ -1,4 +1,4 @@
-package com.iimetra.skip.producer;
+package com.iimetra.skip.service;
 
 import com.iimetra.skip.model.AdjustmentModifiedEvent;
 import com.iimetra.skip.model.BonusModifiedEvent;

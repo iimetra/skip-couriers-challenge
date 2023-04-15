@@ -10,7 +10,7 @@ import com.iimetra.skip.model.CreatedBonusResponse;
 import com.iimetra.skip.model.CreatedDeliveryResponse;
 import com.iimetra.skip.model.DeliveryCreatedEvent;
 import com.iimetra.skip.model.DeliveryRequest;
-import com.iimetra.skip.producer.EventProducerService;
+import com.iimetra.skip.service.EventProducerService;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
