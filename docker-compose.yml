@@ -1,0 +1,75 @@
+version: '2.2'
+
+services:
+
+  rabbitmq3:
+    image: rabbitmq:3-management
+    container_name: rabbit-skip-statements
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=myuser
+      - RABBITMQ_DEFAULT_PASS=mypassword
+
+  db:
+    image: mysql:5.7
+    container_name: mysql-skip-statements-db
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    ports:
+      - '${DB_PORT}:3306'
+    expose:
+      - '${DB_PORT}'
+    volumes:
+      - db_data:/var/lib/mysql
+
+  statement-calculator-app:
+    image: statements-calculator-app
+    container_name: statements-calculator-app
+    build:
+      context: .
+      dockerfile: ./statements-calculator-app/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?autoReconnect=true&useSSL=false
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '${APP_PORT}:8080'
+    expose:
+      - '${APP_PORT}'
+
+  statements-event-consumer:
+    image: statements-event-consumer
+    container_name: statements-event-consumer
+    build:
+      context: .
+      dockerfile: ./statements-event-consumer/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?autoReconnect=true&useSSL=false
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq3:
+        condition: service_started
+
+  statements-event-producer:
+    image: statements-event-producer
+    container_name: statements-event-producer
+    build:
+      context: .
+      dockerfile: ./statements-event-producer/Dockerfile
+    depends_on:
+      rabbitmq3:
+        condition: service_started
+
+volumes:
+  db_data:

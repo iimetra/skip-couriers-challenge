@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    host: localhost
+    username: myuser
+    password: mypassword
+    port: 15672
+    queue: delivery.created
+    exchange: delivery.exchange
+    routingkey: delivery.routingkey

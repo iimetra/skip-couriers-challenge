@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: Events Models API
+  description: Consuming Events API
+  version: 1.0.0
+paths:
+  /fake:
+    get:
+      operationId: "fake"
+      responses:
+        "200":
+          description: success
+components:
+  schemas:
+    DeliveryCreated:
+      type: object
+      required:
+        - deliveryId
+        - courierId
+        - createdTimestamp
+        - value
+      properties:
+        deliveryId:
+          type: string
+        courierId:
+          type: string
+        createdTimestamp:
+          type: string
+    AdjustmentModified:
+      type: object
+    BonusModified:
+      type: object
