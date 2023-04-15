@@ -12,7 +12,7 @@ paths:
           description: success
 components:
   schemas:
-    DeliveryCreated:
+    DeliveryCreatedEvent:
       type: object
       required:
         - deliveryId
@@ -26,7 +26,37 @@ components:
           type: string
         createdTimestamp:
           type: string
-    AdjustmentModified:
+        value:
+          type: number
+    AdjustmentModifiedEvent:
       type: object
-    BonusModified:
+      required:
+        - deliveryId
+        - adjustmentId
+        - modifiedTimestamp
+        - value
+      properties:
+        deliveryId:
+          type: string
+        adjustmentId:
+          type: string
+        modifiedTimestamp:
+          type: string
+        value:
+          type: number
+    BonusModifiedEvent:
       type: object
+      required:
+        - deliveryId
+        - bonusId
+        - modifiedTimestamp
+        - value
+      properties:
+        deliveryId:
+          type: string
+        bonusId:
+          type: string
+        modifiedTimestamp:
+          type: string
+        value:
+          type: number

@@ -1,6 +1,7 @@
+server:
+  port: 8081
+
 spring:
-  main:
-    web-application-type: none
   rabbitmq:
     host: rabbitmq3
     username: myuser
@@ -15,16 +16,3 @@ spring:
     bonusExchange: bonus.exchange
     bonusQueue: bonus.queue
     bonusRoutingKey: bonus.routingKey
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-  datasource:
-    url: jdbc:mysql://localhost:3306/db
-    username: user
-    password: password
-  sql:
-    init:
-      mode: always

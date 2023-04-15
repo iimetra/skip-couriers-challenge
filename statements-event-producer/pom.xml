@@ -18,6 +18,14 @@
         <start-class>com.iimetra.skip.StatementsEventProducerApplication</start-class>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.iimetra.skip</groupId>
+            <artifactId>statements-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

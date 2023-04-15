@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Event Producer Service API
+  description: REST service to produce Delivery, Adjustment and Bonus events
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8081/'
+paths:
+  /events/delivery:
+    post:
+      tags:
+        - events
+      operationId: "createDelivery"
+      summary: "creates delivery with required fields"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryRequest'
+      responses:
+        "201":
+          description: delivery created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedDeliveryResponse'
+  /events/adjustment:
+    post:
+      tags:
+        - events
+      operationId: "createAdjustment"
+      summary: "creates adjustment with required fields"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjustmentRequest'
+      responses:
+        "201":
+          description: adjustment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedAdjustmentResponse'
+  /events/bonus:
+    post:
+      tags:
+        - events
+      operationId: "createBonus"
+      summary: "creates bonus with required fields"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BonusRequest'
+      responses:
+        "201":
+          description: delivery created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedBonusResponse'
+components:
+  schemas:
+    CreatedDeliveryResponse:
+      type: object
+      required:
+        - deliveryId
+      properties:
+        deliveryId:
+          type: string
+    DeliveryRequest:
+      type: object
+      required:
+        - courierId
+        - value
+      properties:
+        courierId:
+          type: string
+        value:
+          type: number
+    CreatedAdjustmentResponse:
+      type: object
+      required:
+        - adjustmentId
+      properties:
+        adjustmentId:
+          type: string
+    AdjustmentRequest:
+      type: object
+      required:
+        - deliveryId
+        - value
+      properties:
+        deliveryId:
+          type: string
+        value:
+          type: number
+    CreatedBonusResponse:
+      type: object
+      required:
+        - bonusId
+      properties:
+        bonusId:
+          type: string
+    BonusRequest:
+      type: object
+      required:
+        - deliveryId
+        - value
+      properties:
+        deliveryId:
+          type: string
+        value:
+          type: number
