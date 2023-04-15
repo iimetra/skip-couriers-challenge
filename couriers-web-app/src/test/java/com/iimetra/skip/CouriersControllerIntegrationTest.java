@@ -40,17 +40,17 @@ public class CouriersControllerIntegrationTest {
 
     @Test
     void testGetCourierDeliveries() {
-        assertThat(restTemplate.getForEntity(baseUrl + "/couriers/courier/deliveries?start=2023-04-15 01:00:00&end=2023-04-15 23:59:59", DeliveryTransactionsResponse.class))
+        assertThat(restTemplate.getForEntity(baseUrl + "/couriers/courier/deliveries?start=2023-04-15 20:00:00&end=2023-04-15 23:59:59", DeliveryTransactionsResponse.class))
             .hasFieldOrPropertyWithValue("status", 200)
             .hasFieldOrPropertyWithValue("body.courierId", "courier")
-            .hasFieldOrPropertyWithValue("body.from", "2023-04-15 01:00:00")
+            .hasFieldOrPropertyWithValue("body.from", "2023-04-15 20:00:00")
             .hasFieldOrPropertyWithValue("body.to", "2023-04-15 23:59:59")
             .hasFieldOrPropertyWithValue("body.numberOfTransactions", 2);
     }
 
     @Test
     void testGetCourierStatement() {
-        assertThat(restTemplate.getForEntity(baseUrl + "/couriers/courier/statements?start=2023-04-15 01:00:00&end=2023-04-15 23:59:59", StatementResponse.class))
+        assertThat(restTemplate.getForEntity(baseUrl + "/couriers/courier/statements?start=2023-04-15 20:00:00&end=2023-04-15 23:59:59", StatementResponse.class))
             .hasFieldOrPropertyWithValue("status", 200)
             .hasFieldOrProperty("body.sum")
             .hasFieldOrProperty("body.deliveryIds")
