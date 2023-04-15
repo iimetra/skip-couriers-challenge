@@ -12,17 +12,17 @@
     </parent>
 
     <groupId>com.iimetra.skip</groupId>
-    <artifactId>skip-statements-parent</artifactId>
+    <artifactId>skip-couriers-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>statements-api</module>
-        <module>statements-event-consumer</module>
-        <module>statements-event-producer</module>
-        <module>statements-calculator-app</module>
-        <module>statements-persistence</module>
-        <module>statements-calculator-impl</module>
+        <module>couriers-api</module>
+        <module>couriers-event-consumer</module>
+        <module>couriers-event-producer</module>
+        <module>couriers-web-app</module>
+        <module>couriers-persistence</module>
+        <module>couriers-web-impl</module>
     </modules>
 
     <properties>

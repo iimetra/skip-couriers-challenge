@@ -31,12 +31,12 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  statement-calculator-app:
-    image: statements-calculator-app
-    container_name: statements-calculator-app
+  couriers-web-app:
+    image: couriers-web-app
+    container_name: couriers-web-app
     build:
       context: .
-      dockerfile: ./statements-calculator-app/Dockerfile
+      dockerfile: ./couriers-web-app/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?autoReconnect=true&useSSL=false
     depends_on:
@@ -47,12 +47,12 @@ services:
     expose:
       - '${APP_PORT}'
 
-  statements-event-consumer:
-    image: statements-event-consumer
-    container_name: statements-event-consumer
+  couriers-event-consumer:
+    image: couriers-event-consumer
+    container_name: couriers-event-consumer
     build:
       context: .
-      dockerfile: ./statements-event-consumer/Dockerfile
+      dockerfile: ./couriers-event-consumer/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://${DB_USER}:${DB_PASSWORD}@db:${DB_PORT}/${DB_NAME}?autoReconnect=true&useSSL=false
     depends_on:
@@ -61,16 +61,16 @@ services:
       rabbitmq3:
         condition: service_started
 
-  statements-event-producer:
-    image: statements-event-producer
-    container_name: statements-event-producer
+  couriers-event-producer:
+    image: couriers-event-producer
+    container_name: couiriers-event-producer
     build:
       context: .
-      dockerfile: ./statements-event-producer/Dockerfile
+      dockerfile: ./couriers-event-producer/Dockerfile
     depends_on:
       rabbitmq3:
         condition: service_started
-      statements-event-consumer:
+      couriers-event-consumer:
         condition: service_started
     ports:
       - '8081:8081'

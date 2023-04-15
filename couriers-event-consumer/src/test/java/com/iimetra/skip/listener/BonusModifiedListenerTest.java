@@ -1,0 +1,91 @@
+package com.iimetra.skip.listener;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.iimetra.skip.model.BonusModifiedEvent;
+import com.iimetra.skip.repository.BonusEventRepository;
+import com.iimetra.skip.repository.DeliveryRecordRepository;
+import com.iimetra.skip.repository.entity.BonusModifiedEntity;
+import com.iimetra.skip.repository.entity.DeliveryRecordEntity;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class BonusModifiedListenerTest {
+
+    @InjectMocks
+    private BonusModifiedListener listener;
+
+    @Mock
+    private DeliveryRecordRepository deliveryRecordRepository;
+    @Mock
+    private BonusEventRepository bonusEventRepository;
+
+    @Test
+    void testReceiveEvent_noDeliveryFound() {
+        BonusModifiedEvent event = BonusModifiedEvent.builder()
+            .bonusId("bonusId")
+            .value(BigDecimal.TEN)
+            .deliveryId("deliveryId")
+            .modifiedTimestamp(LocalDateTime.now().toString())
+            .build();
+
+        when(deliveryRecordRepository.findRecordByDeliveryId(eq(event.getDeliveryId()))).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> listener.receive(event), String.format("There is no delivery %s found", event.getDeliveryId()));
+    }
+
+    @Test
+    void testReceiveEvent() {
+        BonusModifiedEvent event = BonusModifiedEvent.builder()
+            .bonusId("bonusId")
+            .value(BigDecimal.TEN)
+            .deliveryId("deliveryId")
+            .modifiedTimestamp(LocalDateTime.now().toString())
+            .build();
+
+        DeliveryRecordEntity deliveryRecordEntity = DeliveryRecordEntity.builder()
+            .deliveryRecordId("statementId")
+            .deliveryId("deliveryId")
+            .courierId("courierId")
+            .value(BigDecimal.TEN)
+            .lastModifiedAt(Timestamp.valueOf(LocalDateTime.parse(event.getModifiedTimestamp())))
+            .build();
+        when(deliveryRecordRepository.findRecordByDeliveryId(eq(event.getDeliveryId()))).thenReturn(Optional.of(deliveryRecordEntity));
+
+        listener.receive(event);
+
+        ArgumentCaptor<BonusModifiedEntity> bonusCaptor = ArgumentCaptor.forClass(BonusModifiedEntity.class);
+        verify(bonusEventRepository).save(bonusCaptor.capture());
+        BonusModifiedEntity bonusModifiedEntity = bonusCaptor.getValue();
+        assertNotNull(bonusModifiedEntity);
+        assertEquals(event.getBonusId(), bonusModifiedEntity.getBonusId());
+        assertEquals(event.getValue(), bonusModifiedEntity.getValue());
+        assertEquals(event.getDeliveryId(), bonusModifiedEntity.getDeliveryId());
+        assertNotNull(bonusModifiedEntity.getModifiedTimestamp());
+
+        ArgumentCaptor<DeliveryRecordEntity> statementCaptor = ArgumentCaptor.forClass(DeliveryRecordEntity.class);
+        verify(deliveryRecordRepository).save(statementCaptor.capture());
+        DeliveryRecordEntity updatedStatement = statementCaptor.getValue();
+        assertNotNull(updatedStatement);
+        assertNotNull(updatedStatement.getDeliveryRecordId());
+        assertEquals(BigDecimal.valueOf(20), updatedStatement.getValue());
+        assertEquals(event.getDeliveryId(), updatedStatement.getDeliveryId());
+        assertEquals(deliveryRecordEntity.getCourierId(), updatedStatement.getCourierId());
+    }
+
+}
