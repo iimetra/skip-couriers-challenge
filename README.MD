@@ -107,7 +107,5 @@ Response example:
 ```
 
 ### TODO
-- unit tests
 - diagram (service level, project modules with shared dependencies, db level)
 - mapstruct for auto-mapping
-
