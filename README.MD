@@ -1,4 +1,11 @@
-## Statements Calculation System
+## Courier Statements and Deliveries System
+Application consists of 6 modules:
+- couriers-api - shared module which describes API in openAPI format.
+- couriers-persistence - shared module for DB communication.
+- couriers-web-app - main application which exposes REST API to query delivery transactions and courier statements. Includes integration tests.
+- couriers-web-impl - implementation and configuration for main application.
+- couriers-event-producer - application which exposes REST API to submit events per documentation.
+- couriers-event-consumer - application which listens for events from RabbitMQ and writes to DB.
 
 ### Pre-requirements
 
@@ -107,13 +114,18 @@ Response example:
 ```
 
 ### Diagrams
+Some of diagrams were removed due to limitations of free account.
+
+[Lucidchart Diagram Source](https://lucid.app/lucidchart/ed9861e2-98f9-48c6-8a12-716969f75cd6/edit?invitationId=inv_d20166f5-f5fa-452b-9943-c0ce49444b44)
 
 ## High-level architecture
+![High-level Architecture](./diagrams/high_level_architecture.png)
 
 ## Database design
+![Database design](./diagrams/database.png)
 
-## Application modules dependency map
+## Flow diagram
+![Flow diagram](./diagrams/flow.png)
 
 ### TODO
-- diagram (service level, project modules with shared dependencies, db level)
 - mapstruct for auto-mapping
