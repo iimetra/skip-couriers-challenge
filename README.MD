@@ -114,7 +114,7 @@ Response example:
 ```
 
 ### Diagrams
-Some of diagrams were removed due to limitations of free account.
+Some of the diagrams were removed due to limitations of free account.
 
 [Lucidchart Diagram Source](https://lucid.app/lucidchart/ed9861e2-98f9-48c6-8a12-716969f75cd6/edit?invitationId=inv_d20166f5-f5fa-452b-9943-c0ce49444b44)
 
